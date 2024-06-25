@@ -12,7 +12,7 @@ import java.util.Date;
 @AllArgsConstructor
 public class RecordDTO {
     private int id;
-    private Website website;
+
     private String product;
     private Date date;
     private float averagePrice;

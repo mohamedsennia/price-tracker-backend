@@ -32,4 +32,12 @@ generator ="Product_sequence"
     @OneToMany(mappedBy = "product")
     private List<Record> records;
 
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", owner=" + owner +
+                '}';
+    }
 }

@@ -1,19 +1,14 @@
 package com.example.Price.Tracker.product;
 
 import com.example.Price.Tracker.Mapper;
-import com.example.Price.Tracker.Record.Record;
 import com.example.Price.Tracker.Record.RecordService;
-import com.example.Price.Tracker.Record.Website;
 import com.example.Price.Tracker.Scrapper;
 import com.example.Price.Tracker.user.User;
 import com.example.Price.Tracker.user.UserRepository;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
-import java.awt.font.TextHitInfo;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -34,6 +29,7 @@ public class ProductService {
         this.userRepository=userRepository;
         this.recordService=recordService;
         this.scrappers=new LinkedList<Scrapper>();
+
     }
     public List<ProductDTO> getAllProducts(){
         return this.productRepository.findAll().stream().map(mapper::toProduDTO).collect(Collectors.toList());
@@ -55,12 +51,12 @@ public class ProductService {
         Optional<User> owner=this.userRepository.findById(productDTO.getOwnerId());
         owner.ifPresent(product::setOwner);
 
-        for (Website site : Website.values()) {
-            this.scrappers.add(new Scrapper(product.getName(),site));
+       product= this.productRepository.save(product);
+            this.scrappers.add(new Scrapper(product,this.recordService));
             this.scrappers.getLast().start();
 
-        }
+
         System.out.println("started");
-        //this.productRepository.save(product);
+
     }
 }

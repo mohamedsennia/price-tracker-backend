@@ -17,9 +17,9 @@ public ProductDTO toProduDTO(Product product){
     return  new ProductDTO(product.getId(),product.getName(),product.getOwner().getId());
 }
 public Record toRecord(RecordDTO recordDTO){
-    return new Record(recordDTO.getId(),recordDTO.getWebsite(),null,recordDTO.getDate(),recordDTO.getAveragePrice());
+    return new Record(recordDTO.getId(),null,recordDTO.getDate(),recordDTO.getAveragePrice());
 }
 public  RecordDTO toRecordDTO(Record record){
-    return  new RecordDTO(record.getId(),record.getWebsite(),record.getProduct().getName(),record.getDate(),record.getAveragePrice());
+    return  new RecordDTO(record.getId(),record.getProduct().getName(),record.getDate(),record.getAveragePrice());
 }
 }
