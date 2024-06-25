@@ -23,15 +23,15 @@ public class Record {
             generator = "record_sequence"
     )
     private int id;
-    private Website website;
+
     @ManyToOne()
     @JoinColumn(name = "productId")
     private Product product;
     private Date date;
     private float averagePrice;
 
-    public Record(Website website, Product product, Date date, float averagePrice) {
-        this.website = website;
+    public Record( Product product, Date date, float averagePrice) {
+
         this.product = product;
         this.date = date;
         this.averagePrice = averagePrice;
