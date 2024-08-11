@@ -38,5 +38,21 @@ public class RecordController {
     public List<RecordDTO> getProductRecordsByPeriod(@PathVariable int id, @PathVariable("periodStart") @DateTimeFormat(pattern = "yyyy-MM-dd") Date periodStart, @PathVariable("periodEnd") @DateTimeFormat(pattern = "yyyy-MM-dd") Date periodEnd){
 return this.recordService.getProductRecordsByPeriod(id, periodStart, periodEnd);
     }
+    @GetMapping("getProductRecordsTrimester/{id}")
+    public  List<RecordDTO> getProductRecordsTrimester(@PathVariable int id){
+        return  this.recordService.getProductRecordLastTrimester(id);
+    }
+    @GetMapping("getProductRecordsLastWeek/{id}")
+    public  List<RecordDTO> getProductRecordLastWeek(@PathVariable int id){
+        return  this.recordService.getProductRecordLastWeek(id);
+    }
+    @GetMapping("getProductRecordsLastMonth/{id}")
+    public  List<RecordDTO> getProductRecordLastMonth(@PathVariable int id){
+        return  this.recordService.getProductRecordLastMonth(id);
+    }
+    @GetMapping("getProductRecordLastYear/{id}")
+    public  List<RecordDTO> getProductRecordLastYear(@PathVariable int id){
+        return  this.recordService.getProductRecordLastYear(id);
+    }
 
 }

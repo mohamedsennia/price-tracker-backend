@@ -37,41 +37,74 @@ public class RecordService {
         lastWeekCalendar.set(Calendar.MINUTE, 0);
         lastWeekCalendar.set(Calendar.SECOND, 0);
         lastWeekCalendar.set(Calendar.MILLISECOND, 0);
-        return  this.getProductRecordsByPeriod(id,new Date(todayCalender.getTimeInMillis()),new Date(lastWeekCalendar.getTimeInMillis()));
+        return  this.getProductRecordsByPeriod(id,new Date(lastWeekCalendar.getTimeInMillis()),new Date(todayCalender.getTimeInMillis()));
     }
     public  List<RecordDTO> getProductRecordLastMonth(int id){
         Calendar todayCalender = Calendar.getInstance();
-        Calendar firstDayOfTheMonthCalendar = Calendar.getInstance();
-        firstDayOfTheMonthCalendar.set(Calendar.DAY_OF_MONTH,1);
-        firstDayOfTheMonthCalendar.set(Calendar.HOUR_OF_DAY, 0);
-        firstDayOfTheMonthCalendar.set(Calendar.MINUTE, 0);
-        firstDayOfTheMonthCalendar.set(Calendar.SECOND, 0);
-        firstDayOfTheMonthCalendar.set(Calendar.MILLISECOND, 0);
-        return  this.getProductRecordsByPeriod(id,new Date(todayCalender.getTimeInMillis()),new Date(firstDayOfTheMonthCalendar.getTimeInMillis()));
+        Calendar oneMonthAgo = Calendar.getInstance();
+        oneMonthAgo.add(Calendar.MONTH,-1);
+        return  this.getProductRecordsByPeriod(id,new Date(oneMonthAgo.getTimeInMillis()),new Date(todayCalender.getTimeInMillis()));
     }
-    public  void getProductRecordLastTrimester(int id){
-        List<RecordDTO> prices= new ArrayList<RecordDTO>();
-        Calendar endOfTheMonth = Calendar.getInstance();
+    public  List<RecordDTO> getProductRecordLastTrimester(int id){
+        /* TO DO*/
+        //* trimastalRecords (list of records)
+        List<RecordDTO> trimastalRecords=new ArrayList<>();
+        List<RecordDTO> tempRecords=new ArrayList<>();
+        //* set start date as one week ago and date end date as today's
+        Calendar startDate = Calendar.getInstance();
+        Calendar endDate = Calendar.getInstance();
+        Calendar trimastStart=Calendar.getInstance();
+        startDate.add(Calendar.WEEK_OF_YEAR,-1);
+        //* get 3months ago date
+        trimastStart.add(Calendar.MONTH,-3);
+        //* loop until start date before 3 months ago
+        while (trimastStart.compareTo(startDate)<=0){
 
-        List<RecordDTO> currentMonthPrices;
-        for(int i=0;i<3;i++){
-            Calendar firstDayOfTheMonthCalendar = (Calendar) endOfTheMonth.clone();
-            firstDayOfTheMonthCalendar.set(Calendar.DAY_OF_MONTH,1);
-            firstDayOfTheMonthCalendar.set(Calendar.HOUR_OF_DAY, 0);
-            firstDayOfTheMonthCalendar.set(Calendar.MINUTE, 0);
-            firstDayOfTheMonthCalendar.set(Calendar.SECOND, 0);
-            firstDayOfTheMonthCalendar.set(Calendar.MILLISECOND, 0);
-            currentMonthPrices=this.getProductRecordsByPeriod(id,new Date(firstDayOfTheMonthCalendar.getTimeInMillis()),new Date(endOfTheMonth.getTimeInMillis()));
-            float currentMonthPrice=0;
-           for(RecordDTO record:currentMonthPrices){
-               currentMonthPrice+=record.getAveragePrice();
-           }
-            currentMonthPrice=currentMonthPrice/currentMonthPrices.size();
-           prices.add(new RecordDTO(0,"",new Date(firstDayOfTheMonthCalendar.getTimeInMillis()),currentMonthPrice));
-           endOfTheMonth.set(Calendar.DAY_OF_MONTH,1);
-           endOfTheMonth.add(endOfTheMonth.DAY_OF_MONTH,-1);
+        //* get records between start and end
+            tempRecords=this.getProductRecordsByPeriod(id,new Date(startDate.getTimeInMillis()),new Date(endDate.getTimeInMillis()));
+        //* sums them up and calculate the average
+            float average=0;
+            if(tempRecords.size()!=0){
 
+
+            for(RecordDTO recordDTO:tempRecords){
+                average+=recordDTO.getAveragePrice();
+                System.out.println(average);
+            }
+            average/=tempRecords.size();
+            }
+        //* get the date of mid week (start + 3 Days)
+            endDate.add(Calendar.DAY_OF_MONTH,-3);
+        //* add new record with mid week date and average of that week to trimastalRecords
+            trimastalRecords.add(new RecordDTO(id,"",new Date(endDate.getTimeInMillis()),average));
+        //* set end date= start date and start date a week before that
+
+        //* end loop
+        endDate=(Calendar) startDate.clone();
+            startDate.add(Calendar.WEEK_OF_YEAR,-1);
         }
+         return trimastalRecords;
+    }
+    public  List<RecordDTO> getProductRecordLastYear(int id){
+        Calendar startingDate = Calendar.getInstance();
+        Calendar endingDate = Calendar.getInstance();
+        List<RecordDTO> tempRecords,resultRecords;
+        resultRecords=new ArrayList<>();
+
+       int i=0;
+       while (i<12){
+           startingDate.add(Calendar.MONTH,-1);
+           tempRecords=getProductRecordsByPeriod(id,new Date(startingDate.getTimeInMillis()),new Date(endingDate.getTimeInMillis()));
+           float average_price=0.0F;
+           for(RecordDTO recordDTO:tempRecords){
+               average_price+=recordDTO.getAveragePrice();
+           }
+           average_price/=tempRecords.size();
+           resultRecords.add(new RecordDTO(id,"",new Date(startingDate.getTimeInMillis()),average_price));
+           endingDate=(Calendar) startingDate.clone();
+            i++;
+       }
+       return  resultRecords;
     }
 
 }

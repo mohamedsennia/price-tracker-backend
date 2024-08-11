@@ -17,4 +17,5 @@ public class RecordDTO {
     private Date date;
     private float averagePrice;
 
+    
 }
