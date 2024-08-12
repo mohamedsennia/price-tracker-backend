@@ -22,14 +22,19 @@ public class ProductService {
     LinkedList<Scrapper> scrappers;
     @Autowired
     public ProductService(ProductRepository productRepository, Mapper mapper, UserRepository userRepository, RecordService recordService){
-      
+
 
         this.productRepository=productRepository;
         this.mapper=mapper;
         this.userRepository=userRepository;
         this.recordService=recordService;
         this.scrappers=new LinkedList<Scrapper>();
+        for (Product product:productRepository.findAll()){
+            if(product.isActivated()){
 
+                new Scrapper(product,recordService,this,false).start();
+            }
+        }
     }
     public List<ProductDTO> getAllProducts(){
         return this.productRepository.findAll().stream().map(mapper::toProduDTO).collect(Collectors.toList());
@@ -52,11 +57,24 @@ public class ProductService {
         owner.ifPresent(product::setOwner);
 
        product= this.productRepository.save(product);
-            this.scrappers.add(new Scrapper(product,this.recordService));
+            this.scrappers.add(new Scrapper(product,this.recordService,this,true));
             this.scrappers.getLast().start();
 
 
-        System.out.println("started");
 
+
+    }
+    public void  toggleProductActivition(int id){
+        Optional<Product> product=this.productRepository.findById(id);
+        if(product.isPresent()){
+            product.get().toggleProductActivition();
+            this.productRepository.save(product.get());
+            if(product.get().isActivated()){
+                new Scrapper(product.get(),this.recordService,this,false).start();
+            }
+        }
+    }
+    public  boolean isActivated(int id){
+        return  this.productRepository.isActivated(id);
     }
 }

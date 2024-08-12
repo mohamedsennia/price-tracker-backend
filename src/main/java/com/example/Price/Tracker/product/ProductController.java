@@ -47,4 +47,8 @@ public ProductDTO getProductById(@PathVariable int id){
     public void addProduct(@RequestBody ProductDTO product){
 this.productService.addProduct(product);
 }
+    @PutMapping("/toggleProductActivition/{id}")
+    public void toggleProductActivition(@PathVariable int id){this.productService.toggleProductActivition(id);}
+    /*@GetMapping("/isActivated/{id}")
+    public boolean isActivated(@PathVariable int id){return  this.productService.isActivated(id);}*/
 }

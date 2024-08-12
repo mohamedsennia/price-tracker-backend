@@ -31,7 +31,8 @@ generator ="Product_sequence"
     private User owner;
     @OneToMany(mappedBy = "product")
     private List<Record> records;
-
+    @Column(columnDefinition = "boolean default true")
+    private boolean activated;
     @Override
     public String toString() {
         return "Product{" +
@@ -39,5 +40,8 @@ generator ="Product_sequence"
                 ", name='" + name + '\'' +
                 ", owner=" + owner +
                 '}';
+    }
+    public  void toggleProductActivition(){
+        this.activated=!this.activated;
     }
 }

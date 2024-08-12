@@ -5,6 +5,7 @@ package com.example.Price.Tracker;
 import com.example.Price.Tracker.Record.Record;
 import com.example.Price.Tracker.Record.RecordService;
 import com.example.Price.Tracker.product.Product;
+import com.example.Price.Tracker.product.ProductService;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.*;
 import org.openqa.selenium.NoSuchElementException;
@@ -20,8 +21,10 @@ public class Scrapper extends Thread{
  private  Map<String,String> translation;
     private int threshHold;
 private RecordService recordService;
+private ProductService productService;
 private String[] monthsArray=new String[12];
-    public Scrapper(Product product, RecordService recordService){
+private  boolean firstTimescrapping;
+    public Scrapper(Product product, RecordService recordService, ProductService productService,boolean firstTimescrapping){
         this.threshHold=80;
 
         monthsArray[0]="janv.";
@@ -53,9 +56,15 @@ private String[] monthsArray=new String[12];
         translation.put("Nov","nov.");
         translation.put( "Dec","déc.");
     this.recordService =recordService;
+    this.productService=productService;
+    this.firstTimescrapping=firstTimescrapping;
     }
     public void run() {
-        initialScrapeEbay();
+       if(firstTimescrapping){
+           initialScrapeEbay();
+       }else{
+           dailyScrapeEbay();
+       }
         }
     public void initialScrapeEbay(){
 
@@ -170,102 +179,23 @@ private String[] monthsArray=new String[12];
                 }
             }
 
-
-
-
-
-               /* HashMap<String,Float> average_prices=new HashMap<String,Float>();
-                 cal = Calendar.getInstance();
-                counter=0;
-               months=new ArrayList<String>();
-
-                 currentDate=new SimpleDateFormat("MM/dd/YYYY").format(new Date(cal.getTimeInMillis())).toString();
-                float treshHold=(intial_average_price*threshHold)/100;
-                pageNumber=0;
-              previousMonth="";
-                shouldStop=false;
-                months=new ArrayList<String>();
-                for (WebElement page:pages){
-                    pages=driver.findElements(By.className("pagination__item"));
-                    pages.get(pageNumber).click();
-                    pageNumber+=1;
-                    items= driver.findElements(By.className("s-item"));
-
-                for(WebElement item:items){
-
-                    try {
-                        price=item.findElement(By.className("s-item__price"));
-                        title=item.findElement(By.className("s-item__title"));
-                         itemDate=item.findElement(By.className("s-item__listingDate")).getText();
-
-
-                         itemMonth=itemDate.split("-")[0];
-                        while (!monthsArray[new Date(cal.getTimeInMillis()).getMonth()].equals(itemMonth)){
-
-                            cal.add(Calendar.MONTH,-1);
-
-                        }
-                        if(!previousMonth.equals(itemMonth)){
-                            if(counter!=0){
-                                average_prices.replace(currentDate, average_prices.get(currentDate)/counter);
-                            }
-
-                            counter=0;
-                            if(months.stream().anyMatch(itemMonth::equals)){
-
-                                shouldStop=true;
-                                break;
-                            }else{
-                                currentDate=new SimpleDateFormat("MM/dd/YYYY").format(new Date(cal.getTimeInMillis())).toString();
-                                average_prices.put(currentDate,Float.parseFloat("0"));
-                                previousMonth=itemMonth;
-                                months.add(itemMonth);
-                            }
-                        }
-                        if (price.getText().length()>0&&title.getText().toLowerCase().contains(product.getName().toLowerCase())){
-                            String priceString=price.getText().replaceAll(",", ".");
-                            if(priceString.contains("à")){
-                                continue;
-                            }
-                            priceString=priceString.replaceAll("[^0-9.]", "");
-                            float value=Float.parseFloat(priceString);
-                            if((value<intial_average_price+treshHold)&&(value>intial_average_price-treshHold)){
-
-                                average_prices.replace(currentDate, average_prices.get(currentDate)+value);
-
-                                counter++;
-                            }
-                        }
-                    }catch (WebDriverException webDriverException){
-                    }
-                }
-                    if(shouldStop){
-                        break;
-                    }
-            }
-
-
-                for (String key : average_prices.keySet()) {
-                    this.recordService.addRecord(new Record(product,new Date(key),average_prices.get(key)));
-
-                };*/
-
-
-
-
             } catch (Exception e) {
                 System.out.println(e);
             }finally {
                 driver.quit();
-                System.out.println("done");
-                //daileScrapeEbay();
+
+                dailyScrapeEbay();
             }
     }
 
 
 
-    public void daileScrapeEbay(){
+    public void dailyScrapeEbay(){
+       
         while (true){
+            if(!this.productService.isActivated(product.getId())){
+                break;
+            }
             Calendar c = Calendar.getInstance();
             c.add(Calendar.DAY_OF_MONTH, 1);
             c.set(Calendar.HOUR_OF_DAY, 10);
@@ -327,7 +257,7 @@ private String[] monthsArray=new String[12];
                         continue;
                     }
                     priceString=priceString.replaceAll("[^0-9.]", "");
-                    System.out.println(priceString);
+
                     float value=Float.parseFloat(priceString);
 
                     intial_average_price+=value;
@@ -361,7 +291,7 @@ private String[] monthsArray=new String[12];
                         continue;
                     }
                     priceString=priceString.replaceAll("[^0-9.]", "");
-                    System.out.println(priceString);
+
                     float value=Float.parseFloat(priceString);
                     if((value<intial_average_price+treshHold)&&(value>intial_average_price-treshHold)){
                         average_price +=value;
