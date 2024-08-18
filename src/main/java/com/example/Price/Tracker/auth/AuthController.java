@@ -10,7 +10,8 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(
         origins = {
                 "http://localhost:4200",
-                "https://senniamohamed.netlify.app/"
+                "https://senniamohamed.netlify.app/",
+                "https://trackprices.netlify.app/"
         },
         methods = {
                 RequestMethod.OPTIONS,

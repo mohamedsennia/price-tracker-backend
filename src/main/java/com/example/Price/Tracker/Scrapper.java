@@ -184,7 +184,7 @@ private  boolean firstTimescrapping;
             }finally {
                 driver.quit();
                 product.toggleFinishedIntialScrapping();
-               
+
                 this.productService.save(product);
                 dailyScrapeEbay();
             }

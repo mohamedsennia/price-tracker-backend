@@ -11,7 +11,8 @@ import java.util.List;
 @CrossOrigin(
         origins = {
                 "http://localhost:4200",
-                "https://senniamohamed.netlify.app/"
+                "https://senniamohamed.netlify.app/",
+                "https://trackprices.netlify.app/"
         },
         methods = {
                 RequestMethod.OPTIONS,
