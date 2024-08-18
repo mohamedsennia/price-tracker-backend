@@ -11,7 +11,11 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -69,15 +73,18 @@ private  boolean firstTimescrapping;
     public void initialScrapeEbay(){
 
 
-            WebDriverManager.chromedriver().setup();
-            ChromeOptions options = new ChromeOptions();
-            options.addArguments("--headless=new");
-        options.addArguments("--headless"); // Run in headless mode
-        options.addArguments("--no-sandbox"); // Bypass OS security model
-        options.addArguments("--disable-dev-shm-usage"); // Overcome limited resource problems
+        String remoteWebDriverUrl = "https://standalone-chrome-production-1b15.up.railway.app/";
+        DesiredCapabilities capabilities = new DesiredCapabilities();
+        capabilities.setBrowserName("chrome");
+        capabilities.setPlatform(Platform.WINDOWS);
+        ChromeOptions options = new ChromeOptions();
+        options.merge(capabilities);
 
-        WebDriver driver = new ChromeDriver(options);
-            try {
+
+        try {
+            WebDriver  driver = new RemoteWebDriver(new URL(remoteWebDriverUrl), options);
+
+        try {
                 driver.get("https://www.ebay.fr/");
                 Thread.sleep(1000);
                 WebElement searchInput=driver.findElement(By.id("gh-ac"));
@@ -191,7 +198,9 @@ private  boolean firstTimescrapping;
 
                 this.productService.save(product);
                 dailyScrapeEbay();
-            }
+            }  } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
@@ -215,15 +224,19 @@ private  boolean firstTimescrapping;
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-        WebDriverManager.chromedriver().setup();
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--headless=new");
-            options.addArguments("--headless"); // Run in headless mode
-            options.addArguments("--no-sandbox"); // Bypass OS security model
-            options.addArguments("--disable-dev-shm-usage"); // Overcome limited resource problems
+            String remoteWebDriverUrl = "https://standalone-chrome-production-1b15.up.railway.app/";
+            DesiredCapabilities capabilities = new DesiredCapabilities();
+            capabilities.setBrowserName("chrome");
+            capabilities.setPlatform(Platform.WINDOWS);
+            ChromeOptions options = new ChromeOptions();
+            options.merge(capabilities);
 
-        WebDriver driver = new ChromeDriver(options);
-        try {
+
+
+            try {
+WebDriver driver = new RemoteWebDriver(new URL(remoteWebDriverUrl), options);
+
+            try {
             driver.get("https://www.ebay.fr/");
             Thread.sleep(1000);
             WebElement searchInput=driver.findElement(By.id("gh-ac"));
@@ -327,7 +340,9 @@ private  boolean firstTimescrapping;
         }finally {
             driver.quit();
 
-        }
+        } } catch (MalformedURLException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
