@@ -72,7 +72,11 @@ private  boolean firstTimescrapping;
             WebDriverManager.chromedriver().setup();
             ChromeOptions options = new ChromeOptions();
             options.addArguments("--headless=new");
-            WebDriver driver = new ChromeDriver(options);
+        options.addArguments("--headless"); // Run in headless mode
+        options.addArguments("--no-sandbox"); // Bypass OS security model
+        options.addArguments("--disable-dev-shm-usage"); // Overcome limited resource problems
+
+        WebDriver driver = new ChromeDriver(options);
             try {
                 driver.get("https://www.ebay.fr/");
                 Thread.sleep(1000);
@@ -214,6 +218,9 @@ private  boolean firstTimescrapping;
         WebDriverManager.chromedriver().setup();
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--headless=new");
+            options.addArguments("--headless"); // Run in headless mode
+            options.addArguments("--no-sandbox"); // Bypass OS security model
+            options.addArguments("--disable-dev-shm-usage"); // Overcome limited resource problems
 
         WebDriver driver = new ChromeDriver(options);
         try {
