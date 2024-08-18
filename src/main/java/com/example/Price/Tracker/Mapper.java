@@ -11,10 +11,10 @@ import java.util.List;
 @Component
 public class Mapper {
 public Product toProduct(ProductDTO productDTO){
-    return  new Product(productDTO.getId(),productDTO.getName(),null, List.of(),productDTO.isActivated());
+    return  new Product(productDTO.getId(),productDTO.getName(),null, List.of(),productDTO.isActivated(),productDTO.isFinishedIntialScrapping());
 }
 public ProductDTO toProduDTO(Product product){
-    return  new ProductDTO(product.getId(),product.getName(),product.getOwner().getId(),product.isActivated());
+    return  new ProductDTO(product.getId(),product.getName(),product.getOwner().getId(),product.isActivated(),product.isFinishedIntialScrapping());
 }
 public Record toRecord(RecordDTO recordDTO){
     return new Record(recordDTO.getId(),null,recordDTO.getDate(),recordDTO.getAveragePrice());

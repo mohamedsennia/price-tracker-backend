@@ -77,4 +77,10 @@ public class ProductService {
     public  boolean isActivated(int id){
         return  this.productRepository.isActivated(id);
     }
+    public boolean finishedIntialScrapping(int id){
+        return  this.productRepository.finishedIntialScrapping(id);
+    }
+    public void save(Product product){
+        this.productRepository.save(product);
+    }
 }

@@ -11,4 +11,6 @@ public interface ProductRepository extends JpaRepository<Product,Integer> {
     public List<Product> findByOwner(@Param("id") int id);
     @Query("SELECT p.activated from Product p where p.id=:id")
     public boolean isActivated(@Param("id") int id);
+    @Query("SELECT p.finishedIntialScrapping from Product p where p.id=:id")
+    public boolean finishedIntialScrapping(@Param("id") int id);
 }

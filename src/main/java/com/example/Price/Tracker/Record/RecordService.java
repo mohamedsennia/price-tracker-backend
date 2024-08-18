@@ -69,9 +69,12 @@ public class RecordService {
 
             for(RecordDTO recordDTO:tempRecords){
                 average+=recordDTO.getAveragePrice();
-                System.out.println(average);
+
             }
             average/=tempRecords.size();
+            }
+            if(Float.isNaN(average)){
+                average=0;
             }
         //* get the date of mid week (start + 3 Days)
             endDate.add(Calendar.DAY_OF_MONTH,-3);
@@ -100,12 +103,16 @@ public class RecordService {
                average_price+=recordDTO.getAveragePrice();
            }
            average_price/=tempRecords.size();
+           if(Float.isNaN(average_price)){
+               average_price=0;
+           }
            resultRecords.add(new RecordDTO(id,"",new Date(startingDate.getTimeInMillis()),average_price));
            endingDate=(Calendar) startingDate.clone();
             i++;
        }
        return  resultRecords;
     }
+
 
 
 }

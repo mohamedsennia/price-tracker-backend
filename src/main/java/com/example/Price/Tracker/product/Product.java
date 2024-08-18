@@ -33,15 +33,21 @@ generator ="Product_sequence"
     private List<Record> records;
     @Column(columnDefinition = "boolean default true")
     private boolean activated;
+    @Column(columnDefinition = "boolean default false")
+    private boolean finishedIntialScrapping;
     @Override
     public String toString() {
         return "Product{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", owner=" + owner +
+                "finishedIntialScrapping" +this.finishedIntialScrapping+
                 '}';
     }
     public  void toggleProductActivition(){
         this.activated=!this.activated;
+    }
+    public void toggleFinishedIntialScrapping(){
+        this.finishedIntialScrapping=true;
     }
 }

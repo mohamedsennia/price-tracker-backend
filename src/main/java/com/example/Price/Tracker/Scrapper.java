@@ -183,7 +183,9 @@ private  boolean firstTimescrapping;
                 System.out.println(e);
             }finally {
                 driver.quit();
-
+                product.toggleFinishedIntialScrapping();
+               
+                this.productService.save(product);
                 dailyScrapeEbay();
             }
     }
@@ -191,7 +193,7 @@ private  boolean firstTimescrapping;
 
 
     public void dailyScrapeEbay(){
-       
+
         while (true){
             if(!this.productService.isActivated(product.getId())){
                 break;
@@ -247,7 +249,7 @@ private  boolean firstTimescrapping;
 
                 title=item.findElement(By.className("s-item__title"));
                 if(!item.findElement(By.className("s-item__listingDate")).getText().split(" ")[0].equals(translation.get(new SimpleDateFormat("MMM").format(cal.getTime()).toString())+"-"+date.getDate())){
-                    System.out.println("breaking");
+
                     break;
                 }
                 if (price.getText().length()>0&&title.getText().toLowerCase().contains(product.getName().toLowerCase())){

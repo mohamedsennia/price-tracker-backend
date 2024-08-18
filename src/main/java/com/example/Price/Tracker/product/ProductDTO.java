@@ -12,5 +12,5 @@ public class  ProductDTO {
     private String name;
         private int ownerId;
         private boolean activated;
-
+        private boolean finishedIntialScrapping;
 }

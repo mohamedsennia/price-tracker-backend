@@ -49,6 +49,8 @@ this.productService.addProduct(product);
 }
     @PutMapping("/toggleProductActivition/{id}")
     public void toggleProductActivition(@PathVariable int id){this.productService.toggleProductActivition(id);}
-    /*@GetMapping("/isActivated/{id}")
-    public boolean isActivated(@PathVariable int id){return  this.productService.isActivated(id);}*/
+    @GetMapping("/isActivated/{id}")
+    public boolean isActivated(@PathVariable int id){return  this.productService.isActivated(id);}
+    @GetMapping("/finishedIntialScrapping/{id}")
+    public boolean finishedIntialScrapping(@PathVariable int id){return  this.productService.finishedIntialScrapping(id);}
 }
