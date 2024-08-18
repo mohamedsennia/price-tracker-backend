@@ -76,7 +76,7 @@ private  boolean firstTimescrapping;
         String remoteWebDriverUrl = "https://standalone-chrome-production-1b15.up.railway.app/";
         DesiredCapabilities capabilities = new DesiredCapabilities();
         capabilities.setBrowserName("chrome");
-        capabilities.setPlatform(Platform.WINDOWS);
+        capabilities.setPlatform(Platform.LINUX);
         ChromeOptions options = new ChromeOptions();
         options.merge(capabilities);
 
@@ -227,7 +227,7 @@ private  boolean firstTimescrapping;
             String remoteWebDriverUrl = "https://standalone-chrome-production-1b15.up.railway.app/";
             DesiredCapabilities capabilities = new DesiredCapabilities();
             capabilities.setBrowserName("chrome");
-            capabilities.setPlatform(Platform.WINDOWS);
+            capabilities.setPlatform(Platform.LINUX);
             ChromeOptions options = new ChromeOptions();
             options.merge(capabilities);
 
