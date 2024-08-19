@@ -20,14 +20,18 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+
+
+
 @SpringBootApplication
 public class PriceTrackerApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(PriceTrackerApplication.class, args);
+    public static void main(String[] args) {
+        SpringApplication.run(PriceTrackerApplication.class, args);
 
-
-
+     
+       
     }
-
 }
+
+

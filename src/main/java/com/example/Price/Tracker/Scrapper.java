@@ -11,11 +11,7 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.remote.RemoteWebDriver;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -73,26 +69,28 @@ private  boolean firstTimescrapping;
     public void initialScrapeEbay(){
 
 
-        String remoteWebDriverUrl = "https://standalone-chrome-production-1b15.up.railway.app/";
-        DesiredCapabilities capabilities = new DesiredCapabilities();
-        capabilities.setBrowserName("chrome");
-        capabilities.setPlatform(Platform.LINUX);
-
+             // Set ChromeDriver path
+        System.setProperty("webdriver.chrome.driver", "/usr/bin/chromedriver");
+        
+        // Configure Chrome options
         ChromeOptions options = new ChromeOptions();
-        options.addArguments("--headless");
-        options.addArguments("--disable-gpu"); // Disable GPU to save resources
+        options.setBinary("/usr/lib/chromium/chrome"); // Set Chrome binary
+        options.addArguments("--headless=new"); // Ensure headless mode is enabled
         options.addArguments("--no-sandbox"); // Bypass OS security model
-        options.addArguments("--disable-dev-shm-usage");
-        options.addArguments("--disable-extensions");
-        options.addArguments("--disable-infobars");
-        options.addArguments("--disable-features=VizDisplayCompositor");
-        options.merge(capabilities);
+        options.addArguments("--disable-dev-shm-usage"); // Overcome limited resource problems
+        options.addArguments("--disable-gpu"); // Applicable to windows os only
+        options.addArguments("--remote-allow-origins=*"); // Allow origins to resolve CORS issues
+        options.addArguments("--disable-infobars"); // Disabling infobars
+        options.addArguments("--disable-extensions"); // Disabling extensions
+        options.addArguments("start-maximized"); // Open browser in maximized mode
+        
+    
+ 
+      
 
-
-        try {
-            WebDriver  driver = new RemoteWebDriver(new URL(remoteWebDriverUrl), options);
-
-        try {
+        // Start ChromeDriver
+        WebDriver driver = new ChromeDriver(options);
+            try {
                 driver.get("https://www.ebay.fr/");
                 Thread.sleep(1000);
                 WebElement searchInput=driver.findElement(By.id("gh-ac"));
@@ -206,21 +204,14 @@ private  boolean firstTimescrapping;
 
                 this.productService.save(product);
                 dailyScrapeEbay();
-            }  } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
-        }
+            }
     }
 
 
 
     public void dailyScrapeEbay(){
-       int timesScraped=0;
+
         while (true){
-            timesScraped+=1;
-            //this project is for educational purposes, so to save resources i'll set it to stop after 3 days of scrapping
-            if(timesScraped>3){
-                this.productService.toggleProductActivition(product.getId());
-            }
             if(!this.productService.isActivated(product.getId())){
                 break;
             }
@@ -237,19 +228,28 @@ private  boolean firstTimescrapping;
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-            String remoteWebDriverUrl = "https://standalone-chrome-production-1b15.up.railway.app/";
-            DesiredCapabilities capabilities = new DesiredCapabilities();
-            capabilities.setBrowserName("chrome");
-            capabilities.setPlatform(Platform.LINUX);
-            ChromeOptions options = new ChromeOptions();
-            options.merge(capabilities);
+       // Set ChromeDriver path
+        System.setProperty("webdriver.chrome.driver", "/usr/bin/chromedriver");
+        
+        // Configure Chrome options
+        ChromeOptions options = new ChromeOptions();
+        options.setBinary("/usr/lib/chromium/chrome"); // Set Chrome binary
+        options.addArguments("--headless=new"); // Ensure headless mode is enabled
+        options.addArguments("--no-sandbox"); // Bypass OS security model
+        options.addArguments("--disable-dev-shm-usage"); // Overcome limited resource problems
+        options.addArguments("--disable-gpu"); // Applicable to windows os only
+        options.addArguments("--remote-allow-origins=*"); // Allow origins to resolve CORS issues
+        options.addArguments("--disable-infobars"); // Disabling infobars
+        options.addArguments("--disable-extensions"); // Disabling extensions
+        options.addArguments("start-maximized"); // Open browser in maximized mode
+        
+    
+ 
+      
 
-
-
-            try {
-WebDriver driver = new RemoteWebDriver(new URL(remoteWebDriverUrl), options);
-
-            try {
+        // Start ChromeDriver
+        WebDriver driver = new ChromeDriver(options);
+        try {
             driver.get("https://www.ebay.fr/");
             Thread.sleep(1000);
             WebElement searchInput=driver.findElement(By.id("gh-ac"));
@@ -353,12 +353,9 @@ WebDriver driver = new RemoteWebDriver(new URL(remoteWebDriverUrl), options);
         }finally {
             driver.quit();
 
-        } } catch (MalformedURLException e) {
-                throw new RuntimeException(e);
-            }
+        }
         }
     }
 
 
 }
-
