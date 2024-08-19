@@ -32,6 +32,6 @@ public class AuthService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
 
-        return CostumeResponse.builder().token(jwtService.generateToken(user)).role(user.getRole()).build();
+        return CostumeResponse.builder().token(jwtService.generateToken(user)).role(user.getRole()).id(user.getId()).build();
     }
 }

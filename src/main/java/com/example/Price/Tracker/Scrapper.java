@@ -214,8 +214,13 @@ private  boolean firstTimescrapping;
 
 
     public void dailyScrapeEbay(){
-
+       int timesScraped=0;
         while (true){
+            timesScraped+=1;
+            //this project is for educational purposes, so to save resources i'll set it to stop after 3 days of scrapping
+            if(timesScraped>3){
+                this.productService.toggleProductActivition(product.getId());
+            }
             if(!this.productService.isActivated(product.getId())){
                 break;
             }
