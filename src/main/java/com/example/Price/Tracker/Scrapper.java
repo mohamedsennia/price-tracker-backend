@@ -125,11 +125,13 @@ private  boolean firstTimescrapping;
                 previousDate=previousMonth="";
                 List<WebElement> pages=driver.findElements(By.className("pagination__item"));
                 List<WebElement> items;
-                int pageNumber=0;
-                for (WebElement page:pages){
-                    pages=driver.findElements(By.className("pagination__item"));
-                    pages.get(pageNumber).click();
-                    pageNumber+=1;
+
+                int pagesSize=pages.size();
+                pages.get(0).click();
+                String previousPage="1";
+                for (int pageNumber=1;pageNumber<pagesSize+1;pageNumber++){
+                    driver.get(driver.getCurrentUrl().replace("pgn="+previousPage,"pgn="+String.valueOf(pageNumber)));
+                    previousPage=String.valueOf(pageNumber);
                 items= driver.findElements(By.className("s-item"));
                 for(WebElement item:items){
 
